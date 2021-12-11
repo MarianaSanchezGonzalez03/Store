@@ -31,13 +31,13 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             }
         }
         mBinding.btnSave.setOnClickListener {
-            val store = Store(name = mBinding.etName.text.toString().trim())
+            val store = StoreEntity(name = mBinding.etName.text.toString().trim())
             mAdapter.add(store)
         }
 
         /*
         * OnClickListener
         * */
-        override fun onClick(store: Store) {
+        override fun onClick(store: StoreEntity) {
         }
     }
