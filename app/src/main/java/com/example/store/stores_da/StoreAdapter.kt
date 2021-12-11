@@ -20,29 +20,39 @@ class StoreAdapter(private var stores: MutableList<Store>, private  var listener
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewH    older(holder: ViewHolder, position: Int) {
         val store = stores.get(position)
 
         with(holder){
             setListener(store)
             binding.tvName.text = store.name
+            binding.cbFavorite.isChecked = store.isFavorite
         }
     }
 
     override fun getItemCount(): Int = stores.size
-    fun add(store: Store) {
-        stores.add(store)
-        notifyDataSetChanged()
-    }
     fun setStores(stores: MutableList<StoreEntity>) {
         this.stores = stores
         notifyDataSetChanged()
     }
+
+    fun add(store: Store) {
+        stores.add(store)
+        notifyDataSetChanged()
+    }
+    fun update(storeEntity: StoreEntity) {
+        val index = stores.indexOf(storeEntity)
+        if (index != -1){
+            stores.set(index, storeEntity)
+            notifyItemChanged(index)
+        }
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val binding = ItemStoreBinding.bind(view)
 
         fun setListener(store: Store){
             binding.root.setOnClickListener { listener.onClick(store) }
+            binding.cbFavorite.setOnClickListener {
+                listener.onFavoriteStore(storeEntity)
         }
     }
 }
