@@ -11,7 +11,7 @@ interface StoreDao {
     fun addStore(storeEntity: StoreEntity)
 
     @Update
-    fun updateStore(storeEntity: StoreEntity)
+    fun addStore(storeEntity: StoreEntity): Long
 
     @Delete
     fun deleteStore(storeEntity: StoreEntity)

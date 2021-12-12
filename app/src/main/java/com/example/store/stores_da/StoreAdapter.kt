@@ -41,11 +41,14 @@ class StoreAdapter(private var stores: MutableList<Store>, private  var listener
         notifyDataSetChanged()
     }
     fun update(storeEntity: StoreEntity) {
+        if (!stores.contains(storeEntity)){
+
         val index = stores.indexOf(storeEntity)
         if (index != -1){
             stores.set(index, storeEntity)
-            notifyItemChanged(index)
+            notifyItemInserted(stores.size-1)
         }
+            }
         fun delete(storeEntity: StoreEntity) {
             val index = stores.indexOf(storeEntity)
             if (index != -1){
