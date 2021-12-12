@@ -16,60 +16,75 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_main)
-            mBinding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(mBinding.root)
+/*mBinding = ActivityMainBinding.inflate(layoutInflater)
+setContentView(mBinding.root)
 
-            setupRecyclerView()
-        }
+setupRecyclerView()
+}
 
-        private fun setupRecyclerView() {
-            mAdapter = StoreAdapter(mutableListOf(), this)
-            mGridLayout = GridLayoutManager(this, 2)
-            getStores()
-            mBinding.recyclerView.apply {
-                setHasFixedSize(true)
-                layoutManager = mGridLayout
-                adapter = mAdapter
+private fun setupRecyclerView() {
+mAdapter = StoreAdapter(mutableListOf(), this)
+mGridLayout = GridLayoutManager(this, 2)
+getStores()
+mBinding.recyclerView.apply {
+    setHasFixedSize(true)
+    layoutManager = mGridLayout
+    adapter = mAdapter
+}
+}
+mBinding.btnSave.setOnClickListener {
+val store = StoreEntity(name = mBinding.etName.text.toString().trim())
+
+Thread{
+    StoreApplication.database.storeDao().addStore(store)
+}.start()
+mAdapter.add(store)
+}
+}*/
+
+            mBinding.fab.setOnClickListener { launchEditFragment() }
+ */
+            private fun launchEditFragment() {
+                val fragment = EditStoreFragment()
+
+                val fraManager = supportFragmentManager
+                val fragmentTransaction = fraManager.beginTransaction()
+
+                fragmentTransaction.add(R.id.containerMain, fragment)
+                fragmentTransaction.commit()
+
+                mBinding.fab.hide()
             }
-        }
-        mBinding.btnSave.setOnClickListener {
-            val store = StoreEntity(name = mBinding.etName.text.toString().trim())
-
-            Thread{
-                StoreApplication.database.storeDao().addStore(store)
-            }.start()
-            mAdapter.add(store)
-        }
-        private fun getStores(){
-            doAsync {
-                val stores = StoreApplication.database.storeDao().getAllStores()
-                uiThread {
-                    mAdapter.setStores(stores)
-                }
-            }
-
-        }
-        /*
-        * OnClickListener
-        * */
-        override fun onClick(store: StoreEntity) {
-        }
-
-        override fun onFavoriteStore(storeEntity: StoreEntity) {
-            storeEntity.isFavorite = !storeEntity.isFavorite
-            doAsync {
-                StoreApplication.database.storeDao().updateStore(storeEntity)
-                uiThread {
-                    mAdapter.update(storeEntity)
-                }
-            }
-        }
+private fun getStores(){
+doAsync {
+    val stores = StoreApplication.database.storeDao().getAllStores()
+    uiThread {
+        mAdapter.setStores(stores)
     }
-    override fun onDeleteStore(storeEntity: StoreEntity) {
-        doAsync {
-            StoreApplication.database.storeDao().deleteStore(storeEntity)
-            uiThread {
-                mAdapter.delete(storeEntity)
-            }
-        }
+}
+
+}
+/*
+* OnClickListener
+* */
+override fun onClick(store: StoreEntity) {
+}
+
+override fun onFavoriteStore(storeEntity: StoreEntity) {
+storeEntity.isFavorite = !storeEntity.isFavorite
+doAsync {
+    StoreApplication.database.storeDao().updateStore(storeEntity)
+    uiThread {
+        mAdapter.update(storeEntity)
     }
+}
+}
+}
+override fun onDeleteStore(storeEntity: StoreEntity) {
+doAsync {
+StoreApplication.database.storeDao().deleteStore(storeEntity)
+uiThread {
+    mAdapter.delete(storeEntity)
+}
+}
+}
