@@ -47,10 +47,12 @@ mAdapter.add(store)
             private fun launchEditFragment() {
                 val fragment = EditStoreFragment()
 
+
                 val fraManager = supportFragmentManager
                 val fragmentTransaction = fraManager.beginTransaction()
 
                 fragmentTransaction.add(R.id.containerMain, fragment)
+                fragmentTransaction.addToBackStack(null)
                 fragmentTransaction.commit()
 
                 mBinding.fab.hide()
