@@ -46,16 +46,25 @@ class EditStoreFragment : Fragment() {
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mActivity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
         setHasOptionsMenu(true)
-        mBinding.etPhotoUrl.addTextChangedListener {
+        setupTextFields()
+    }
+
+    private fun setupTextFields() {
+        with(mBinding) {
+            etName.addTextChangedListener { validateFields(tilName) }
+            etPhone.addTextChangedListener { validateFields(tilPhone) }
+            etPhotoUrl.addTextChangedListener {
+                validateFields( tilPhotoUrl)
+                loadImage(it.toString().trim())
+            }
+        }
+        private fun loadImage(url: String){
             Glide.with(this)
-                .load(mBinding.etPhotoUrl.text.toString())
+                .load(url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .into(mBinding.imgPhoto)
         }
-        mBinding.etName.addTextChangedListener { validateFields(mBinding.tilName) }
-        mBinding.etPhone.addTextChangedListener { validateFields(mBinding.tilPhone) }
-        mBinding.etPhotoUrl.addTextChangedListener { validateFields(mBinding.tilPhotoUrl) }
     }
     private fun getStore(id: Long) {
         doAsync {
