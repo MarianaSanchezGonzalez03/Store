@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stores_da.databinding.ItemStoreBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class StoreAdapter(private var stores: MutableList<Store>, private  var listener: OnClickListener) :
     RecyclerView.Adapter<StoreAdapter.ViewHolder>() {
@@ -27,6 +29,11 @@ class StoreAdapter(private var stores: MutableList<Store>, private  var listener
             setListener(store)
             binding.tvName.text = store.name
             binding.cbFavorite.isChecked = store.isFavorite
+            Glide.with(mContext)
+                .load(store.photoUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(binding.imgPhoto)
         }
     }
 
