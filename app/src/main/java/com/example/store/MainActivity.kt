@@ -65,7 +65,7 @@ private fun getStores(){
 doAsync {
     val stores = StoreApplication.database.storeDao().getAllStores()
     uiThread {
-        mAdapter.setStores(stores)
+        updateStore(storeEntity)
     }
 
     override fun addStore(storeEntity: StoreEntity) {
