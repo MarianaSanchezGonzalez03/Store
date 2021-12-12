@@ -48,7 +48,9 @@ class EditStoreFragment : Fragment() {
 
                 doAsync {
                     StoreApplication.database.storeDao().addStore(store)
-                    uiThread {
+                    uiThread{
+
+                        mActivity?.addStore(store)
                         hideKeyboard()
                         Snackbar.make(mBinding.root,
                             getString(R.string.edit_store_message_save_success),

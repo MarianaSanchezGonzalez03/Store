@@ -64,6 +64,13 @@ doAsync {
     uiThread {
         mAdapter.setStores(stores)
     }
+
+    override fun addStore(storeEntity: StoreEntity) {
+        mAdapter.add(storeEntity)
+    }
+
+    override fun updateStore(storeEntity: StoreEntity) {
+    }
 }
 
 }
