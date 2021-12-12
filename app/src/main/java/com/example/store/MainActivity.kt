@@ -1,5 +1,7 @@
 package com.example.stores_da
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -108,11 +110,19 @@ override fun onDeleteStore(storeEntity: StoreEntity) {
         .setItems(items, { dialogInterface, i ->
             when(i){
                 0 -> confirmDelete(storeEntity)
-                1 -> Toast.makeText(this,"Llamar...",Toast.LENGTH_SHORT).show()
+                1-> dial(storeEntity.phone)
                 2 -> Toast.makeText(this,"Sitio web...",Toast.LENGTH_SHORT).show()
             }
         })
         .show()
+    private fun dial(phone: String){
+        val callIntent = Intent().apply {
+            action = Intent.ACTION_DIAL
+            data = Uri.parse("tel:$phone")
+        }
+
+        startActivity(callIntent)
+    }
 }
 
         private fun confirmDelete(storeEntity: StoreEntity){
