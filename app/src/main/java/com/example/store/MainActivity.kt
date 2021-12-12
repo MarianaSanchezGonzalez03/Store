@@ -159,4 +159,14 @@ override fun onDeleteStore(storeEntity: StoreEntity) {
         .show()
 
     mAdapter.update(storeEntity)
+        startIntent(websiteIntent)
+    }
+}
+
+private fun startIntent(intent: Intent){
+    if (intent.resolveActivity(packageManager) != null)
+        startActivity(intent)
+    else
+        Toast.makeText(this,R.string.main_error_no_resolve,Toast.LENGTH_LONG).show()
+}
 }}
