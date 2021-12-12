@@ -34,7 +34,8 @@ class EditStoreFragment : Fragment() {
 
         val id = arguments?.getLong(getString(R.string.arg_id),0)
         if (id != null && id != 0L){
-            Toast.makeText(activity,id.toString(),Toast.LENGTH_SHORT).show()
+            mIsEditMode = false
+            mStoreEntity = StoreEntity(name = "", phone = "", photoUrl = "")
         }else{
             mIsEditMode = true
             getStore(id)
@@ -79,44 +80,62 @@ class EditStoreFragment : Fragment() {
                 true
             }
             R.id.action_save -> {
-                val store = StoreEntity(name = mBinding.etName.text.toString().trim(),
-                    phone = mBinding.etPhone.text.toString().trim(),
-                    website = mBinding.etWebsite.text.toString().trim(),
-                    photoUrl = mBinding.etPhotoUrl.text.toString().trim())
-
-                doAsync {
-                    store.id = StoreApplication.database.storeDao().addStore(store)
-                    uiThread{
-
-                        mActivity?.addStore(store)
-                        hideKeyboard()
-                        Toast.makeText(mActivity,R.string.edit_store_message_save_success,Toast.LENGTH_SHORT).show()
-                        mActivity?.onBackPressed()
+                if (mStoreEntity != null){
+/*val store = StoreEntity(name = mBinding.etName.text.toString().trim(),
+phone = mBinding.etPhone.text.toString().trim(),
+website = mBinding.etWebsite.text.toString().trim(),
+ photoUrl = mBinding.etPhotoUrl.text.toString().trim())*/
+                    with(mStoreEntity!!){
+                        name = mBinding.etName.text.toString().trim()
+                        phone = mBinding.etPhone.text.toString().trim()
+                        website = mBinding.etWebsite.text.toString().trim()
+                        photoUrl = mBinding.etPhotoUrl.text.toString().trim()
                     }
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-        //return super.onOptionsItemSelected(item)
-    }
 
-    private fun hideKeyboard(){
-        val imm = mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (view != null){
-            imm.hideSoftInputFromWindow(view!!.windowToken,0)
-        }
-    }
+                    doAsync {
+                        if (mIsEditMode) StoreApplication.database.storeDao().updateStore(mStoreEntity!!)
+                        else mStoreEntity!!.id = StoreApplication.database.storeDao().addStore(mStoreEntity!!)
+                        uiThread {
 
-    override fun onDestroyView() {
-        hideKeyboard()
-        super.onDestroyView()
-    override fun onDestroy() {
-        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        mActivity?.supportActionBar?.title = getString(R.string.app_name)
-        mActivity?.hideFab(true)
+                            hideKeyboard()
 
-        setHasOptionsMenu(false)
-        super.onDestroy()
-    }
+                            if (mIsEditMode){
+                                mActivity?.updateStore(mStoreEntity!!)
+                                Snackbar.make(mBinding.root,
+                                    R.string.edit_store_message_update_success,
+                                    Snackbar.LENGTH_SHORT).show()
+                            }else{
+                                mActivity?.addStore(mStoreEntity!!)
+                                Toast.makeText(mActivity,R.string.edit_store_message_save_success,Toast.LENGTH_SHORT).show()
+
+                                mActivity?.onBackPressed()
+                            }
+                        }
+}
+}
+true
+}
+else -> super.onOptionsItemSelected(item)
+}
+//return super.onOptionsItemSelected(item)
+}
+
+private fun hideKeyboard(){
+val imm = mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+if (view != null){
+imm.hideSoftInputFromWindow(view!!.windowToken,0)
+}
+}
+
+override fun onDestroyView() {
+hideKeyboard()
+super.onDestroyView()
+override fun onDestroy() {
+mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+mActivity?.supportActionBar?.title = getString(R.string.app_name)
+mActivity?.hideFab(true)
+
+setHasOptionsMenu(false)
+super.onDestroy()
+}
 }
