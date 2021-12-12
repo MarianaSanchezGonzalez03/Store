@@ -121,7 +121,10 @@ override fun onDeleteStore(storeEntity: StoreEntity) {
             data = Uri.parse("tel:$phone")
         }
 
-        startActivity(callIntent)
+        if (callIntent.resolveActivity(packageManager) != null)
+            startActivity(callIntent)
+        else
+            Toast.makeText(this,R.string.main_error_no_resolve,Toast.LENGTH_LONG).show()
     }
     private fun goToWebsite(website: String){
         if (website.isEmpty()){
@@ -132,7 +135,10 @@ override fun onDeleteStore(storeEntity: StoreEntity) {
                 data = Uri.parse(website)
             }
 
-            startActivity(websiteIntent)
+            if (websiteIntent.resolveActivity(packageManager) != null)
+                startActivity(websiteIntent)
+            else
+                Toast.makeText(this,R.string.main_error_no_resolve,Toast.LENGTH_LONG).show()
         }
     }
 }
