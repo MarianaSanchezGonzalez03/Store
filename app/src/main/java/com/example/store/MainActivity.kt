@@ -44,7 +44,10 @@ mAdapter.add(store)
 
             mBinding.fab.setOnClickListener { launchEditFragment() }
  */
-            private fun launchEditFragment() {
+            private fun launchEditFragment(args: Bundle? = null) {
+
+                if (args != null) fragment.arguments = args
+
                 val fragment = EditStoreFragment()
 
 
@@ -69,7 +72,11 @@ doAsync {
         mAdapter.add(storeEntity)
     }
 
-    override fun updateStore(storeEntity: StoreEntity) {
+    override fun onClick(storeId: Long) {
+        val args = Bundle()
+        args.putLong(getString(R.string.arg_id), storeId)
+
+        launchEditFragment(args)
     }
 }
 
