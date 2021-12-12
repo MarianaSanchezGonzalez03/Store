@@ -19,6 +19,8 @@ class EditStoreFragment : Fragment() {
 
     private lateinit var mBinding: FragmentEditStoreBinding
     private var mActivity: MainActivity? = null
+    private var mIsEditMode: Boolean = false
+    private var mStoreEntity: StoreEntity? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle? ): View? {
@@ -33,7 +35,8 @@ class EditStoreFragment : Fragment() {
         if (id != null && id != 0L){
             Toast.makeText(activity,id.toString(),Toast.LENGTH_SHORT).show()
         }else{
-            Toast.makeText(activity,id.toString(),Toast.LENGTH_SHORT).show()
+            mIsEditMode = true
+            getStore(id)
         }
         mActivity = activity as? MainActivity
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -47,7 +50,12 @@ class EditStoreFragment : Fragment() {
                 .into(mBinding.imgPhoto)
         }
     }
-
+    private fun getStore(id: Long) {
+        doAsync {
+            mStoreEntity = StoreApplication.database.storeDao().getStoreId(id)
+            uiThread {  }
+        }
+    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_save, menu)
         super.onCreateOptionsMenu(menu, inflater)
